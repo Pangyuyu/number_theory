@@ -1,0 +1,150 @@
+{
+  "name": "guestin.820li.ota",
+  "id": "guestin.820li.ota",
+  "version": "1.0.7",
+  "description": "820Li OTA",
+  "private": true,
+  "homepage": "https://github.com/guestin",
+  "author": "guestin <stone@guestin.cn>",
+  "email": "stone@guestin.cn",
+  "main": "./main/main.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@git.guestin.cn:guestin/820Li_ota_two.git"
+  },
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build",
+    "serve": "vite preview",
+    "copy_res": "node ./copy_res.js",
+    "electron": "node ./loadhint.js && wait-on tcp:3000 && cross-env NODE_ENV=development electron . --trace-warnings ...",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none yarn run dev\" \"yarn run electron\"",
+    "electron:build.win": "yarn run build && electron-builder --win --dir",
+    "electron:build.linux": "yarn run build && electron-builder --linux",
+    "electron:build.linux.appImage": "yarn run build && electron-builder --linux appImage",
+    "electron:build.linux.deb": "yarn run build && electron-builder --linux deb",
+    "electron:build.test": "yarn run build && electron-builder --dir",
+    "electron:build.exe_all": "yarn run build && electron-builder --win --x64 --ia32",
+    "electron:build.exe_x64": "yarn run build && electron-builder --win --x64",
+    "electron:build.exe_x86": "yarn run build && electron-builder --win --ia32"
+  },
+  "build": {
+    "appId": "guestin.820li.ota",
+    "productName": "820Li_OTA",
+    "artifactName": "${productName}_${version}_${os}_${arch}.${ext}",
+    "copyright": "Copyright © 2022 ${author}",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./resources/icons/logo.png"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "./resources/icons/logo.png"
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "./resources/icons"
+    },
+    "asar": true,
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "dist/**/*",
+      "main/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "../release"
+    },
+    "extraResources": {
+      "from": "./resources",
+      "to": "./"
+    }
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "2.0.10",
+    "@types/spark-md5": "^3.0.2",
+    "axios": "0.27.2",
+    "consola": "^2.15.3",
+    "default-passive-events": "^2.0.0",
+    "element-plus": "2.2.19",
+    "querystring": "^0.2.1",
+    "url": "^0.11.0",
+    "vue": "3.2.41",
+    "vue-router": "4.1.5",
+    "wait-on": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "18.7.18",
+    "@vitejs/plugin-vue": "3.1.0",
+    "@vue/compiler-sfc": "3.2.41",
+    "concurrently": "^7.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "21.2.0",
+    "electron-builder": "23.6.0",
+    "pinia": "2.0.23",
+    "sass": "1.54.9",
+    "sass-loader": "13.0.2",
+    "script-loader": "^0.7.2",
+    "scss": "^0.2.4",
+    "typescript": "4.7.4",
+    "unplugin-auto-import": "0.11.2",
+    "unplugin-vue-components": "0.22.7",
+    "vite": "3.1.8",
+    "vite-plugin-compression": "0.5.1",
+    "vite-plugin-optimize-persist": "^0.1.2",
+    "vite-plugin-package-config": "^0.1.1",
+    "vite-plugin-style-import": "2.0.0",
+    "vue-tsc": "0.40.13"
+  },
+  "vite": {
+    "optimizeDeps": {
+      "include": [
+        "@element-plus/icons-vue",
+        "axios",
+        "default-passive-events",
+        "element-plus",
+        "element-plus/es",
+        "element-plus/es/components/button/style/css",
+        "element-plus/es/components/card/style/css",
+        "element-plus/es/components/checkbox-group/style/css",
+        "element-plus/es/components/checkbox/style/css",
+        "element-plus/es/components/config-provider/style/css",
+        "element-plus/es/components/date-picker/style/css",
+        "element-plus/es/components/dialog/style/css",
+        "element-plus/es/components/divider/style/css",
+        "element-plus/es/components/form-item/style/css",
+        "element-plus/es/components/form/style/css",
+        "element-plus/es/components/icon/style/css",
+        "element-plus/es/components/image/style/css",
+        "element-plus/es/components/input/style/css",
+        "element-plus/es/components/menu-item/style/css",
+        "element-plus/es/components/menu/style/css",
+        "element-plus/es/components/option/style/css",
+        "element-plus/es/components/pagination/style/css",
+        "element-plus/es/components/popover/style/css",
+        "element-plus/es/components/radio-group/style/css",
+        "element-plus/es/components/radio/style/css",
+        "element-plus/es/components/select/style/css",
+        "element-plus/es/components/tab-pane/style/css",
+        "element-plus/es/components/table-column/style/css",
+        "element-plus/es/components/table/style/css",
+        "element-plus/es/components/tabs/style/css",
+        "element-plus/es/components/upload/style/css",
+        "element-plus/lib/locale/lang/zh-cn",
+        "querystring",
+        "vue",
+        "vue-router"
+      ]
+    }
+  }
+}

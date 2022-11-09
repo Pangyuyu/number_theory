@@ -1,0 +1,11 @@
+/nt_client/.yarn/cache
+/nt_client/.yarn/install-state.gz
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# 此文件下的文件，是编译后直接生成的
+/nt_client/resources/server/
+/release
+/nt_client/logs/*.*
