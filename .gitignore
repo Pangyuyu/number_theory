@@ -1,6 +1,10 @@
+/table/
 /nt_client/.yarn/cache
 /nt_client/.yarn/install-state.gz
+/nt_client/node_modules/
+/nt_client/node_modules/
 
+/nt_server/logs/
 .vscode/*
 !.vscode/extensions.json
 .idea
