@@ -76,6 +76,7 @@
     "axios": "0.27.2",
     "consola": "^2.15.3",
     "default-passive-events": "^2.0.0",
+    "echarts": "^5.4.0",
     "element-plus": "2.2.19",
     "querystring": "^0.2.1",
     "url": "^0.11.0",
