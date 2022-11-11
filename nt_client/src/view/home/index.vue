@@ -21,11 +21,13 @@ const options = ref([
   {
     value: 0,
     label: "质数序列",
+    seriestype:'line',
     dataSource: demoData.primeList
   },
   {
     value: 1,
     label: "质数间隔",
+    seriestype:'scatter',
     dataSource: demoData.primeInterList
   }
 ])
@@ -35,20 +37,20 @@ watch(() => optionValue.value, (value, oldValue) => {
 function displayData() {
   const optionItem = options.value.find(item => { return item.value == optionValue.value })
   if (optionItem) {
-    initEcharts(optionItem.label, optionItem.dataSource)
+    initEcharts(optionItem)
   }
 }
-function initEcharts(text, dataSource) {
+function initEcharts(optionItem) {
   var myChart = echarts.init(document.getElementById('echarts'));
   let xList = []
   let yList = []
-  dataSource.forEach(item => {
+  optionItem.dataSource.forEach(item => {
     xList.push(item.no)
     yList.push(item.value)
   })
   myChart.setOption({
     title: {
-      text: text
+      text: optionItem.label
     },
     tooltip: {},
     xAxis: {
@@ -58,8 +60,10 @@ function initEcharts(text, dataSource) {
     series: [
       {
         name: '值',
-        type: 'line',
-        data: yList
+        type: optionItem.seriestype,//bar,line,scatter
+        smooth: true,
+        data: yList,
+        symbolSize:[5,5]
       }
     ]
   });
@@ -70,7 +74,7 @@ function initEcharts(text, dataSource) {
 .page {
   display: flex;
   flex-direction: column;
-  background-color: #e3ebf3;
+  background-color: #FFFFFF;
 
   .query {
     background-color: #7eb6f6;
