@@ -1,57 +1,72 @@
 <template>
   <div class="page">
     <div class="query">
-      <el-select v-model="optionValue" placeholder="请选择">
+      <div class="title">数据类型：</div>
+      <el-select v-model="optionValue" placeholder="请选择" :disabled="loading">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
+      <div class="title">起始位置:</div>
+      <el-input-number v-model="startIndex" :min="1" :max="100000000" :disabled="loading" />
+      <div class="title">结束位置:</div>
+      <el-input-number v-model="endIndex" :min="1" :max="100000000" :disabled="loading" />
+      <div class="title">分批数量:</div>
+      <el-input-number v-model="groupCount" :min="1" :max="10000" :disabled="loading" />
+      <el-button type="primary" style="margin-left:10px" @Click="onClickStartLoading()" :loading="loading">开始加载
+      </el-button>
+      <el-button type="success" @Click="onClickEndLoading()" :disabled="!loading">停止加载</el-button>
     </div>
     <div class="echarts" id="echarts"></div>
+    <div class="status-bar">
+      <div class="status-item">
+        开始时间:{{ startTime }}
+      </div>
+      <div class="status-item">
+        停止时间:{{ endTime }}
+      </div>
+      <div class="status-item">
+        已加载总数:{{ loadingCount }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue'
 import * as echarts from 'echarts';
-import demoData from './demodata.json';
+import time from '@/common/utils/time'
 onMounted(() => {
-  displayData()
+
 })
 const optionValue = ref(0)
 const options = ref([
   {
     value: 0,
     label: "质数序列",
-    seriestype:'line',
-    dataSource: demoData.primeList
+    seriestype: 'line',
   },
   {
     value: 1,
     label: "质数间隔",
-    seriestype:'scatter',
-    dataSource: demoData.primeInterList
+    seriestype: 'scatter',
   }
 ])
-watch(() => optionValue.value, (value, oldValue) => {
-  displayData()
-})
-function displayData() {
-  const optionItem = options.value.find(item => { return item.value == optionValue.value })
-  if (optionItem) {
-    initEcharts(optionItem)
+
+const startIndex = ref(0)
+const endIndex = ref(10000)
+const groupCount = ref(1000)
+const loading = ref(false)
+const startTime = ref("-")
+const endTime = ref("-")
+const loadingCount = ref(0)
+let xList = []
+let yList = []
+let myChart = null
+function initEcharts() {
+  if (myChart == null) {
+    myChart = echarts.init(document.getElementById('echarts'));
   }
-}
-function initEcharts(optionItem) {
-  var myChart = echarts.init(document.getElementById('echarts'));
-  let xList = []
-  let yList = []
-  optionItem.dataSource.forEach(item => {
-    xList.push(item.no)
-    yList.push(item.value)
-  })
+  const optionItem = options.value.find(item => { return item.value == optionValue.value })
   myChart.setOption({
-    title: {
-      text: optionItem.label
-    },
     tooltip: {},
     xAxis: {
       data: xList
@@ -63,10 +78,60 @@ function initEcharts(optionItem) {
         type: optionItem.seriestype,//bar,line,scatter
         smooth: true,
         data: yList,
-        symbolSize:[5,5]
+        symbolSize: [5, 5]
       }
     ]
   });
+}
+function updateEcharts() {
+  return new Promise((resolve, __) => {
+    setTimeout(() => {
+      myChart.setOption({
+        xAxis: {
+          data: xList
+        },
+        series: [
+          {
+            name: '值',
+            data: yList,
+          }
+        ]
+      });
+      resolve({})
+    }, 500)
+  })
+}
+async function onClickStartLoading() {
+  startTime.value = time.timestamp2Str(time.unixNow(), "hh:mm:ss")
+  xList = []
+  yList = []
+  loading.value = true
+  initEcharts()
+  for (let i = 0; i < endIndex.value; i = i + groupCount.value) {
+    if (!loading.value) {
+      break
+    }
+    const queryRes = await window.EPre.dbQueryTheoryByIndex(i, i + groupCount.value)
+    console.log("查询结果", queryRes)
+    if (queryRes.isFail) {
+      console.error("查询失败", queryRes)
+      break;
+    }
+    queryRes.data.forEach(item => {
+      xList.push(item.no)
+      yList.push(item.value)
+    })
+    await updateEcharts()
+    loadingCount.value = xList.length
+    if (!loading.value) {
+      break
+    }
+  }
+  loading.value = false
+  endTime.value = time.timestamp2Str(time.unixNow(), "hh:mm:ss")
+}
+function onClickEndLoading() {
+  loading.value = false
 }
 </script>
 
@@ -77,7 +142,7 @@ function initEcharts(optionItem) {
   background-color: #FFFFFF;
 
   .query {
-    background-color: #7eb6f6;
+    background-color: #282a28;
     height: 65px;
     display: flex;
     align-items: center;
@@ -87,5 +152,12 @@ function initEcharts(optionItem) {
   .echarts {
     flex-grow: 1
   }
+}
+
+.title {
+  font-size: 14px;
+  margin-left: 10px;
+  margin-right: 5px;
+  color: white;
 }
 </style>

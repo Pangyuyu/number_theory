@@ -13,3 +13,4 @@
 /nt_client/resources/server/
 /release
 /nt_client/logs/*.*
+node_modules/

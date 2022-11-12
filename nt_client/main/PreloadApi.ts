@@ -103,4 +103,10 @@ export default interface PreLoadApi {
     * @param encrypted 已加密的数据
     */
    appSafeDecrypt(encrypted:string):Promise<any>,
+   /**
+    * 查询质数
+    * @param start 素数开始索引 
+    * @param end 素数结束索引
+    */
+   dbQueryTheoryByIndex(start:number,end:number):Promise<any>,
 }
