@@ -109,4 +109,10 @@ export default interface PreLoadApi {
     * @param end 素数结束索引
     */
    dbQueryTheoryByIndex(start:number,end:number):Promise<any>,
+   /**
+    * 查询质数间隔
+    * @param start 素数开始索引 
+    * @param end 素数结束索引
+    */
+    dbQueryTheoryInterval(start:number,end:number):Promise<any>,
 }

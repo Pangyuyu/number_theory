@@ -44,6 +44,6 @@ contextBridge.exposeInMainWorld('EPre', {
     firmwareExist: (repo, version, md5) => ipcRenderer.invoke("fireware-exists", { repo: repo, version: version, md5: md5 }),
     appSafeEncrypt: (plainText) => ipcRenderer.invoke("app-safe-encrypt", { plainText: plainText }),
     appSafeDecrypt: (encrypted) => ipcRenderer.invoke("app-safe-decrypt", { encrypted: encrypted }),
-    dbQueryTheoryByIndex: (start, end) => ipcRenderer.invoke("db-query-theory-byindex", { start: start, end: end })
-
+    dbQueryTheoryByIndex: (start, end) => ipcRenderer.invoke("db-query-theory-byindex", { start: start, end: end }),
+    dbQueryTheoryInterval: (start, end) => ipcRenderer.invoke("db-query-theory-interval", { start: start, end: end })
 })

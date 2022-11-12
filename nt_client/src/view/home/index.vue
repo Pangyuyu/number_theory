@@ -78,50 +78,58 @@ function initEcharts() {
         type: optionItem.seriestype,//bar,line,scatter
         smooth: true,
         data: yList,
-        symbolSize: [5, 5]
+        symbolSize: [2, 2]
       }
     ]
   });
 }
 function updateEcharts() {
-  return new Promise((resolve, __) => {
-    setTimeout(() => {
-      myChart.setOption({
-        xAxis: {
-          data: xList
-        },
-        series: [
-          {
-            name: '值',
-            data: yList,
-          }
-        ]
-      });
-      resolve({})
-    }, 500)
-  })
+  myChart.setOption({
+    xAxis: {
+      data: xList
+    },
+    series: [
+      {
+        name: '值',
+        data: yList,
+      }
+    ]
+  });
 }
 async function onClickStartLoading() {
   startTime.value = time.timestamp2Str(time.unixNow(), "hh:mm:ss")
   xList = []
   yList = []
-  loading.value = true
   initEcharts()
-  for (let i = 0; i < endIndex.value; i = i + groupCount.value) {
+  let queryFunc = null
+  if (optionValue.value == 0) {
+    queryFunc = window.EPre.dbQueryTheoryByIndex
+  } else if (optionValue.value == 1) {
+    queryFunc = window.EPre.dbQueryTheoryInterval
+  }
+  if (queryFunc == null) {
+    return
+  }
+
+  loading.value = true
+  startRefreshEcharts()
+  for (let i = startIndex.value; i < endIndex.value; i = i + groupCount.value) {
     if (!loading.value) {
       break
     }
-    const queryRes = await window.EPre.dbQueryTheoryByIndex(i, i + groupCount.value)
+    const queryRes = await queryFunc(i, i + groupCount.value)
     console.log("查询结果", queryRes)
     if (queryRes.isFail) {
       console.error("查询失败", queryRes)
       break;
     }
+    if(queryRes.data.length==0){
+      break
+    }
     queryRes.data.forEach(item => {
       xList.push(item.no)
       yList.push(item.value)
     })
-    await updateEcharts()
     loadingCount.value = xList.length
     if (!loading.value) {
       break
@@ -129,9 +137,23 @@ async function onClickStartLoading() {
   }
   loading.value = false
   endTime.value = time.timestamp2Str(time.unixNow(), "hh:mm:ss")
+  updateEcharts()
+  stopRefreshEcharts()
 }
 function onClickEndLoading() {
   loading.value = false
+}
+let startFlag = null
+function startRefreshEcharts() {
+  startFlag = setInterval(() => {
+    updateEcharts()
+  }, 2000)
+}
+function stopRefreshEcharts() {
+  if (startFlag) {
+    clearInterval(startFlag)
+    startFlag = null
+  }
 }
 </script>
 

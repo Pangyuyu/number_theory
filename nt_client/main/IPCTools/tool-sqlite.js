@@ -29,6 +29,12 @@ class ToolDbTheory {
             const queryRes=await queryQll(sql)
             return queryRes
         })
+        ipcMain.handle("db-query-theory-interval",async(event,args)=>{
+            const sql = `SELECT tp1.n1 as 'no',(tp2.v2-tp1.v1) as value from (select "number" AS n1, value as v1 from tb_prime where "number">=${args.start} and "number" <=${args.end}) as tp1
+            LEFT JOIN (select "number" AS n2, value as v2 from tb_prime where "number">=${args.start} and "number" <=${args.end+1}) as tp2 on tp2.n2=tp1.n1+1`
+            const queryRes=await queryQll(sql)
+            return queryRes
+        })
     }
     unRegister(ipcMain) {
         ipcMain.removeHandler("db-query-theory-byindex")
