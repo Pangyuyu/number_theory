@@ -20,29 +20,32 @@ contextBridge.exposeInMainWorld('EPre', {
     appTitle: (title) => ipcRenderer.send("app-title", { title: title }),
     appCopy: (text) => ipcRenderer.send("app-copy", { text: text }),
     appInfo: () => ipcRenderer.invoke("app-info", {}),
-    appIsDebug:()=>ipcRenderer.invoke("app-isDebug", {}),
+    appIsDebug: () => ipcRenderer.invoke("app-isDebug", {}),
     firmwareChoose: () => ipcRenderer.invoke('fireware-zip-choose', {}),
     localServerStart: () => ipcRenderer.invoke("local-server-start", {}),
     localServerStop: () => ipcRenderer.invoke("local-server-stop", {}),
     localServerState: () => ipcRenderer.invoke("local-server-state", {}),
     localServerPort: () => ipcRenderer.invoke("local-server-port", {}),
-    fileDown: (url, fileName, fileMd5,tag) => ipcRenderer.invoke("file-down", {
+    fileDown: (url, fileName, fileMd5, tag) => ipcRenderer.invoke("file-down", {
         url: url,
         name: fileName,
         md5: fileMd5,
-        tag:tag
+        tag: tag
     }),
-    fileDownSilence:(url,filePath,fileMd5,tag)=>ipcRenderer.invoke("file-down-silence",{
+    fileDownSilence: (url, filePath, fileMd5, tag) => ipcRenderer.invoke("file-down-silence", {
         url: url,
         path: filePath,
         md5: fileMd5,
-        tag:tag,
+        tag: tag,
     }),
     onFileDownReply: (callback) => ipcRenderer.on('file-down-reply', callback),
     directoryOpen: (dirPath) => ipcRenderer.invoke("directory-open", { dirPath: dirPath }),
     fileMd5Checked: (filePath, targetMd5) => ipcRenderer.invoke("file-md5-check", { filePath: filePath, md5: targetMd5 }),
-    firmwareExist:(repo,version,md5)=>ipcRenderer.invoke("fireware-exists",{repo:repo,version:version,md5:md5}),
-    appSafeEncrypt:(plainText)=>ipcRenderer.invoke("app-safe-encrypt",{plainText:plainText}),
-    appSafeDecrypt:(encrypted)=>ipcRenderer.invoke("app-safe-decrypt",{encrypted:encrypted})
-
+    firmwareExist: (repo, version, md5) => ipcRenderer.invoke("fireware-exists", { repo: repo, version: version, md5: md5 }),
+    appSafeEncrypt: (plainText) => ipcRenderer.invoke("app-safe-encrypt", { plainText: plainText }),
+    appSafeDecrypt: (encrypted) => ipcRenderer.invoke("app-safe-decrypt", { encrypted: encrypted }),
+    dbQueryPrimeByIndex: (start, end) => ipcRenderer.invoke("db-query-prime-byindex", { start: start, end: end }),
+    dbQueryPrimeInterval: (start, end) => ipcRenderer.invoke("db-query-prime-interval", { start: start, end: end }),
+    dbQueryPrimeFirstSpacing:(start, end)=>ipcRenderer.invoke("db-query-prime-first-spacing", { start: start, end: end }),
+    dbQueryPrimeSpacingStat:(start, end)=>ipcRenderer.invoke("db-query-prime-spacing-stat", { start: start, end: end }),
 })

@@ -103,4 +103,24 @@ export default interface PreLoadApi {
     * @param encrypted 已加密的数据
     */
    appSafeDecrypt(encrypted:string):Promise<any>,
+   /**
+    * 查询质数
+    * @param start 素数开始索引 
+    * @param end 素数结束索引
+    */
+   dbQueryPrimeByIndex(start:number,end:number):Promise<any>,
+   /**
+    * 查询质数间隔
+    * @param start 素数开始索引 
+    * @param end 素数结束索引
+    */
+    dbQueryPrimeInterval(start:number,end:number):Promise<any>,
+    /**
+     * 首次邻质差值出现的位置
+     */
+    dbQueryPrimeFirstSpacing(start:number,end:number):Promise<any>,
+    /**
+     * 质数间隔统计
+     */
+    dbQueryPrimeSpacingStat(start:number,end:number):Promise<any>,
 }

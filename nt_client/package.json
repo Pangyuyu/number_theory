@@ -27,7 +27,8 @@
     "electron:build.test": "yarn run build && electron-builder --dir",
     "electron:build.exe_all": "yarn run build && electron-builder --win --x64 --ia32",
     "electron:build.exe_x64": "yarn run build && electron-builder --win --x64",
-    "electron:build.exe_x86": "yarn run build && electron-builder --win --ia32"
+    "electron:build.exe_x86": "yarn run build && electron-builder --win --ia32",
+    "test:auto":"node ./main/Tests/theoryStatFirstIntervalToCsv.js"
   },
   "build": {
     "appId": "guestin.820li.ota",
@@ -76,8 +77,10 @@
     "axios": "0.27.2",
     "consola": "^2.15.3",
     "default-passive-events": "^2.0.0",
+    "echarts": "^5.4.0",
     "element-plus": "2.2.19",
     "querystring": "^0.2.1",
+    "sqlite3": "^5.1.2",
     "url": "^0.11.0",
     "vue": "3.2.41",
     "vue-router": "4.1.5",
