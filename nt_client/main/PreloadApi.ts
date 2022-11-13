@@ -116,7 +116,11 @@ export default interface PreLoadApi {
     */
     dbQueryPrimeInterval(start:number,end:number):Promise<any>,
     /**
+     * 首次邻质差值出现的位置
+     */
+    dbQueryPrimeFirstSpacing(start:number,end:number):Promise<any>,
+    /**
      * 质数间隔统计
      */
-    dbQueryPrimeSpacingStat():Promise<any>,
+    dbQueryPrimeSpacingStat(start:number,end:number):Promise<any>,
 }

@@ -6,9 +6,9 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <div class="title">起始位置:</div>
-      <el-input-number v-model="startIndex" :min="1" :max="50847534" :disabled="loading||!hasCycle" />
+      <el-input-number v-model="startIndex" :min="1" :max="50847534" :disabled="loading" />
       <div class="title">结束位置:</div>
-      <el-input-number v-model="endIndex" :min="1" :max="50847534" :disabled="loading||!hasCycle" />
+      <el-input-number v-model="endIndex" :min="1" :max="50847534" :disabled="loading" />
       <div class="title">分批数量:</div>
       <el-input-number v-model="groupCount" :min="1" :max="10000" :disabled="loading||!hasCycle" />
       <el-button type="primary" style="margin-left:10px" @Click="onClickStartLoading()" :loading="loading">开始加载
@@ -62,7 +62,14 @@ const options = ref([
   },
   {
     value: 2,
-    label: "质数间隔统计",
+    label: "首次邻质差值出现的位置",
+    displayMode: 'echart',
+    seriestype: 'line',
+    hasCycle: false,//此项不需要循环
+  },
+  {
+    value: 3,
+    label: "邻质数差统计",
     displayMode: 'echart',
     seriestype: 'line',
     hasCycle: false,//此项不需要循环
@@ -129,6 +136,8 @@ async function onClickStartLoading() {
   } else if (optionValue.value == 1) {
     queryFunc = window.EPre.dbQueryPrimeInterval
   } else if (optionValue.value == 2) {
+    queryFunc = window.EPre.dbQueryPrimeFirstSpacing
+  }else if (optionValue.value == 3) {
     queryFunc = window.EPre.dbQueryPrimeSpacingStat
   }
   if (queryFunc == null) {
@@ -160,7 +169,7 @@ async function onClickStartLoading() {
       }
     }
   } else {
-    const queryRes = await queryFunc()
+    const queryRes = await queryFunc(startIndex.value,endIndex.value)
     if (queryRes.isFail) {
       console.error("查询失败", queryRes)
       return;

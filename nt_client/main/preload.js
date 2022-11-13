@@ -46,5 +46,6 @@ contextBridge.exposeInMainWorld('EPre', {
     appSafeDecrypt: (encrypted) => ipcRenderer.invoke("app-safe-decrypt", { encrypted: encrypted }),
     dbQueryPrimeByIndex: (start, end) => ipcRenderer.invoke("db-query-prime-byindex", { start: start, end: end }),
     dbQueryPrimeInterval: (start, end) => ipcRenderer.invoke("db-query-prime-interval", { start: start, end: end }),
-    dbQueryPrimeSpacingStat:()=>ipcRenderer.invoke("db-query-prime-spacing-stat", {  }),
+    dbQueryPrimeFirstSpacing:(start, end)=>ipcRenderer.invoke("db-query-prime-first-spacing", { start: start, end: end }),
+    dbQueryPrimeSpacingStat:(start, end)=>ipcRenderer.invoke("db-query-prime-spacing-stat", { start: start, end: end }),
 })
