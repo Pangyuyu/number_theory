@@ -6,16 +6,23 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <div class="title">起始位置:</div>
-      <el-input-number v-model="startIndex" :min="1" :max="100000000" :disabled="loading" />
+      <el-input-number v-model="startIndex" :min="1" :max="50847534" :disabled="loading||!hasCycle" />
       <div class="title">结束位置:</div>
-      <el-input-number v-model="endIndex" :min="1" :max="100000000" :disabled="loading" />
+      <el-input-number v-model="endIndex" :min="1" :max="50847534" :disabled="loading||!hasCycle" />
       <div class="title">分批数量:</div>
-      <el-input-number v-model="groupCount" :min="1" :max="10000" :disabled="loading" />
+      <el-input-number v-model="groupCount" :min="1" :max="10000" :disabled="loading||!hasCycle" />
       <el-button type="primary" style="margin-left:10px" @Click="onClickStartLoading()" :loading="loading">开始加载
       </el-button>
       <el-button type="success" @Click="onClickEndLoading()" :disabled="!loading">停止加载</el-button>
     </div>
     <div class="echarts" id="echarts"></div>
+    <!-- <el-table :data="tableData" border style="width: 100%" v-if="optionValue == 2">
+      <el-table-column prop="no" label="no" width="180" />
+      <el-table-column prop="before" label="before" width="180" />
+      <el-table-column prop="after" label="after" width="180" />
+      <el-table-column prop="diff" label="间隔" width="180" />
+      <el-table-column/>
+    </el-table> -->
     <div class="status-bar">
       <div class="status-item">
         开始时间:{{ startTime }}
@@ -42,15 +49,30 @@ const options = ref([
   {
     value: 0,
     label: "质数序列",
+    displayMode: 'echart',
     seriestype: 'line',
+    hasCycle: true,
   },
   {
     value: 1,
     label: "质数间隔",
+    displayMode: 'echart',
     seriestype: 'scatter',
+    hasCycle: true,
+  },
+  {
+    value: 2,
+    label: "质数间隔统计",
+    displayMode: 'echart',
+    seriestype: 'line',
+    hasCycle: false,//此项不需要循环
   }
 ])
-
+const hasCycle = ref(true)
+watch(() => optionValue.value, (value, oldValue) => {
+  const optionItem = options.value.find(item => { return item.value == optionValue.value })
+  hasCycle.value = optionItem.hasCycle
+})
 const startIndex = ref(0)
 const endIndex = ref(10000)
 const groupCount = ref(1000)
@@ -103,38 +125,56 @@ async function onClickStartLoading() {
   initEcharts()
   let queryFunc = null
   if (optionValue.value == 0) {
-    queryFunc = window.EPre.dbQueryTheoryByIndex
+    queryFunc = window.EPre.dbQueryPrimeByIndex
   } else if (optionValue.value == 1) {
-    queryFunc = window.EPre.dbQueryTheoryInterval
+    queryFunc = window.EPre.dbQueryPrimeInterval
+  } else if (optionValue.value == 2) {
+    queryFunc = window.EPre.dbQueryPrimeSpacingStat
   }
   if (queryFunc == null) {
     return
   }
-
   loading.value = true
   startRefreshEcharts()
-  for (let i = startIndex.value; i < endIndex.value; i = i + groupCount.value) {
-    if (!loading.value) {
-      break
+  if (hasCycle.value) {
+    for (let i = startIndex.value; i < endIndex.value; i = i + groupCount.value) {
+      if (!loading.value) {
+        break
+      }
+      const queryRes = await queryFunc(i, i + groupCount.value)
+      console.log("查询结果", queryRes)
+      if (queryRes.isFail) {
+        console.error("查询失败", queryRes)
+        break;
+      }
+      if (queryRes.data.length == 0) {
+        break
+      }
+      queryRes.data.forEach(item => {
+        xList.push(item.no)
+        yList.push(item.value)
+      })
+      loadingCount.value = xList.length
+      if (!loading.value) {
+        break
+      }
     }
-    const queryRes = await queryFunc(i, i + groupCount.value)
-    console.log("查询结果", queryRes)
+  } else {
+    const queryRes = await queryFunc()
     if (queryRes.isFail) {
       console.error("查询失败", queryRes)
-      break;
+      return;
     }
-    if(queryRes.data.length==0){
-      break
+    if (queryRes.data.length == 0) {
+      return
     }
     queryRes.data.forEach(item => {
       xList.push(item.no)
       yList.push(item.value)
     })
     loadingCount.value = xList.length
-    if (!loading.value) {
-      break
-    }
   }
+
   loading.value = false
   endTime.value = time.timestamp2Str(time.unixNow(), "hh:mm:ss")
   updateEcharts()

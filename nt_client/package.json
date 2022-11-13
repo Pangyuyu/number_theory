@@ -27,7 +27,8 @@
     "electron:build.test": "yarn run build && electron-builder --dir",
     "electron:build.exe_all": "yarn run build && electron-builder --win --x64 --ia32",
     "electron:build.exe_x64": "yarn run build && electron-builder --win --x64",
-    "electron:build.exe_x86": "yarn run build && electron-builder --win --ia32"
+    "electron:build.exe_x86": "yarn run build && electron-builder --win --ia32",
+    "test:auto":"node ./main/Tests/theoryStatFirstIntervalToCsv.js"
   },
   "build": {
     "appId": "guestin.820li.ota",

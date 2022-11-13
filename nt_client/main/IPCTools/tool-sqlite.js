@@ -11,33 +11,51 @@ let db = new sqlite3.Database(dbFile, (err) => {
     }
     log.d("打开数据库成功")
 })
-function queryQll(sql) {
-    return new Promise((resolve, __) => {
-        db.all(sql, (err, rows) => {
-            if (err) {
-                resolve(NewError(err.message)) 
-                return 
-            }
-            resolve(NewOK(rows)) 
-        })
-    })
-}
+// function queryQll(sql) {
+//     return new Promise((resolve, __) => {
+//         db.all(sql, (err, rows) => {
+//             if (err) {
+//                 resolve(NewError(err.message)) 
+//                 return 
+//             }
+//             resolve(NewOK(rows)) 
+//         })
+//     })
+// }
 class ToolDbTheory {
     registerOn(ipcMain, mainWin) {
-        ipcMain.handle("db-query-theory-byindex",async (event, args) => {
+        ipcMain.handle("db-query-prime-byindex",async (event, args) => {
             const sql = `SELECT "number" as "no",value from tb_prime where "number">${args.start} AND  "number"<=${args.end}`
-            const queryRes=await queryQll(sql)
+            const queryRes=await this.queryQll(sql)
             return queryRes
         })
-        ipcMain.handle("db-query-theory-interval",async(event,args)=>{
+        ipcMain.handle("db-query-prime-interval",async(event,args)=>{
             const sql = `SELECT tp1.n1 as 'no',(tp2.v2-tp1.v1) as value from (select "number" AS n1, value as v1 from tb_prime where "number">=${args.start} and "number" <=${args.end}) as tp1
             LEFT JOIN (select "number" AS n2, value as v2 from tb_prime where "number">=${args.start} and "number" <=${args.end+1}) as tp2 on tp2.n2=tp1.n1+1`
-            const queryRes=await queryQll(sql)
+            const queryRes=await this.queryQll(sql)
+            return queryRes
+        })
+        ipcMain.handle("db-query-prime-spacing-stat",async(event,args)=>{
+            const sql = `SELECT  diff as no,count as value from tb_prime_spacing tps`
+            const queryRes=await this.queryQll(sql)
             return queryRes
         })
     }
+    queryQll(sql) {
+        return new Promise((resolve, __) => {
+            db.all(sql, (err, rows) => {
+                if (err) {
+                    resolve(NewError(err.message)) 
+                    return 
+                }
+                resolve(NewOK(rows)) 
+            })
+        })
+    }
     unRegister(ipcMain) {
-        ipcMain.removeHandler("db-query-theory-byindex")
+        ipcMain.removeHandler("db-query-prime-byindex")
+        ipcMain.removeHandler("db-query-prime-interval")
+        ipcMain.removeHandler("db-query-prime-spacing-stat")
     }
 }
 
