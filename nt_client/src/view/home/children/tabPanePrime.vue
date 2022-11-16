@@ -94,7 +94,12 @@ function initEcharts() {
     }
     const optionItem = options.value.find(item => { return item.value == optionValue.value })
     myChart.setOption({
-        tooltip: {},
+        title: {
+            show: false
+        },
+        legend: {
+            show: false,
+        },
         xAxis: {
             data: xList
         },
@@ -217,6 +222,7 @@ function stopRefreshEcharts() {
         height: 55px;
         display: flex;
         align-items: center;
+        border-radius: 10px;
     }
 
     .echarts {
