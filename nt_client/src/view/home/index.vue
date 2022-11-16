@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <el-tabs v-model="activeName" class="demo-tabs" tab-position="left">
+    <el-tabs v-model="activeName" class="demo-tabs" tab-position="left" type="border-card">
       <el-tab-pane label="质数" name="tabPanePrime">
         <tabPanePrimeVue />
       </el-tab-pane>

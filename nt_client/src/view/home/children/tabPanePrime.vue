@@ -218,11 +218,10 @@ function stopRefreshEcharts() {
     height: calc(100vh - 10px);
 
     .query {
-        background-color: #3c3c3c;
-        height: 55px;
+        height: 46px;
         display: flex;
         align-items: center;
-        border-radius: 10px;
+        border-bottom: 1px solid #8b8a8a;
     }
 
     .echarts {
@@ -238,6 +237,6 @@ function stopRefreshEcharts() {
     font-size: 14px;
     margin-left: 10px;
     margin-right: 5px;
-    color: #FFFFFF;
+    color: #3c3c3c;
 }
 </style>
