@@ -1,8 +1,15 @@
 package tools
 
-import "math/big"
+import (
+	"github.com/labstack/echo/v4"
+	"math/big"
+)
 
-func CheckIsPrime(a int64) bool {
+func CheckIsPrime(c echo.Context) error {
+
+	return nil
+}
+func checkIsPrime(a int64) bool {
 	if big.NewInt(a).ProbablyPrime(0) {
 		return true
 	}

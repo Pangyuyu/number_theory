@@ -15,29 +15,24 @@ var magic string
 
 var mainLog = logging.NewLogger("MAIN")
 
-const _magic = "uaow43ri7asokdlfy99321lsdjf"
-
 func init() {
-	flag.StringVar(&port, "p", "40001", "本地服务启动端口号")
+	flag.StringVar(&port, "p", "60001", "本地服务启动端口号")
 	flag.StringVar(&magic, "m", "", "")
 }
 
 //Golang之信号处理（Signal） https://zhuanlan.zhihu.com/p/128953024
 func main() {
 	flag.Parse()
-
-	if magic != _magic {
-		mainLog.Debug("权限校验失败，禁止调用此程序!")
-		return
-	}
 	e := echo.New()
 	address := fmt.Sprintf(":%s", port)
 	mainLog.Debug("start server", zap.String("port", address))
 	apiGroup := e.Group("/api").
-		Group("/v1").
-		Group("/number-theory")
+		Group("/number").
+		Group("/theory")
 	apiGroup.Use(middleware.Recover())
 	apiGroup.Use(middleware.CORS())
 	apiGroup.GET("/ws/listen", tools.WSListenStartV2)
+	//apiGroup.GET("/prime/check", tools.CheckIsPrime)
 	e.Logger.Fatal(e.Start(address))
+
 }
