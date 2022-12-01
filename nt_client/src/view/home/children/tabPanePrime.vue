@@ -1,7 +1,7 @@
 <template>
     <div class="pane-page">
         <div class="query">
-            <div class="title">数据类型：</div>
+            <div class="title">操作类型：</div>
             <el-select v-model="optionValue" placeholder="请选择" :disabled="loading">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
@@ -208,35 +208,3 @@ function stopRefreshEcharts() {
     }
 }
 </script>
-
-
-<style lang="scss" scoped>
-.pane-page {
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF;
-    height: calc(100vh - 10px);
-
-    .query {
-        height: 46px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #8b8a8a;
-    }
-
-    .echarts {
-        width: 99%;
-        height: 100%;
-        margin: 10px;
-        border-radius: 10px;
-        border: 1px solid #3c3c3c;
-    }
-}
-
-.title {
-    font-size: 14px;
-    margin-left: 10px;
-    margin-right: 5px;
-    color: #3c3c3c;
-}
-</style>

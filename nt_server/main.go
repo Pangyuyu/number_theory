@@ -1,38 +1,55 @@
 package main
 
+import "C"
 import (
-	"flag"
-	"fmt"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"go.uber.org/zap"
-	"nt_server/logging"
-	"nt_server/tools"
+	"bytes"
+	"container/list"
+	"encoding/binary"
+	"math/big"
+	"unsafe"
 )
 
-var port string //本地服务启动的端口号
-var magic string
-
-var mainLog = logging.NewLogger("MAIN")
-
-func init() {
-	flag.StringVar(&port, "p", "60001", "本地服务启动端口号")
-	flag.StringVar(&magic, "m", "", "")
+//CheckIsPrime 判断是否是质数
+//export  CheckIsPrime
+func CheckIsPrime(a int64) bool {
+	if big.NewInt(a).ProbablyPrime(0) {
+		return true
+	}
+	return false
 }
 
-//Golang之信号处理（Signal） https://zhuanlan.zhihu.com/p/128953024
+//CalcCollatz 3n+1猜想 考拉茨（Collatz）猜想
+//export  CalcCollatz
+func CalcCollatz(digit uint32) unsafe.Pointer {
+	result := digit
+	resultList := list.New()
+	resultList.PushBack(result)
+	for {
+		if result == 1 {
+			break
+		}
+		if result%2 == 0 {
+			result = result / 2
+		} else {
+			result = result*3 + 1
+		}
+		resultList.PushBack(result)
+	}
+	res := make([]uint32, resultList.Len()+1)
+	res[0] = uint32(resultList.Len())
+	index := 0
+	for i := resultList.Front(); i != nil; i = i.Next() {
+		index++
+		res[index] = i.Value.(uint32)
+	}
+	buf := new(bytes.Buffer)
+	err := binary.Write(buf, binary.BigEndian, res)
+	if err != nil {
+		panic(err)
+	}
+	return C.CBytes(buf.Bytes())
+}
+
 func main() {
-	flag.Parse()
-	e := echo.New()
-	address := fmt.Sprintf(":%s", port)
-	mainLog.Debug("start server", zap.String("port", address))
-	apiGroup := e.Group("/api").
-		Group("/number").
-		Group("/theory")
-	apiGroup.Use(middleware.Recover())
-	apiGroup.Use(middleware.CORS())
-	apiGroup.GET("/ws/listen", tools.WSListenStartV2)
-	//apiGroup.GET("/prime/check", tools.CheckIsPrime)
-	e.Logger.Fatal(e.Start(address))
 
 }

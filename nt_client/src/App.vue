@@ -192,30 +192,32 @@ function caclWsStyle(wsState: EnWsAction) {
   align-items: center;
 }
 
-.ws-state {
-  width: 14px;
-  height: 14px;
-  border-radius: 10px;
-  z-index: 10;
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  border: 1px solid #4ba6f6;
+.pane-page {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    height: calc(100vh - 10px);
+
+    .query {
+        height: 46px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #8b8a8a;
+    }
+
+    .echarts {
+        width: 99%;
+        height: 100%;
+        margin: 10px;
+        border-radius: 10px;
+        border: 1px solid #3c3c3c;
+    }
 }
 
-.ws-state-normal {
-  background-color: rgb(211, 208, 208);
-}
-
-.ws-state-conn {
-  background-color: rgb(6, 244, 6);
-}
-
-.ws-state-conning {
-  background-color: rgb(237, 206, 8);
-}
-
-.ws-state-error {
-  background-color: red;
+.title {
+    font-size: 14px;
+    margin-left: 10px;
+    margin-right: 5px;
+    color: #3c3c3c;
 }
 </style>
