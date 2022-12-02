@@ -15,7 +15,7 @@
             </el-button>
             <el-button type="success" @Click="onClickEndLoading()" :disabled="!loading">停止加载</el-button>
         </div>
-        <div class="echarts" id="echarts"></div>
+        <div class="echarts" id="echarts_prime"></div>
         <div class="status-bar">
             <div class="status-item">
                 开始时间:{{ startTime }}
@@ -90,7 +90,7 @@ let yList = []
 let myChart = null
 function initEcharts() {
     if (myChart == null) {
-        myChart = echarts.init(document.getElementById('echarts'));
+        myChart = echarts.init(document.getElementById('echarts_prime'));
     }
     const optionItem = options.value.find(item => { return item.value == optionValue.value })
     myChart.setOption({

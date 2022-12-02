@@ -62,7 +62,14 @@ function initEcharts() {
                 type: optionItem.seriestype,//bar,line,scatter
                 smooth: true,
                 data: yList,
-                symbolSize: [2, 2]
+                symbolSize: [2, 2],
+                label: {
+                    show: true,
+                    position: 'bottom',
+                    textStyle: {
+                        fontSize: 20
+                    }
+                }
             }
         ]
     });
@@ -79,5 +86,12 @@ function updateEcharts() {
             }
         ]
     });
+}
+function onClickStart() {
+    this.loading = true
+    xList = []
+    yList = []
+    initEcharts()
+    this.loading = false
 }
 </script>

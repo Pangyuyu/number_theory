@@ -11,17 +11,6 @@ let db = new sqlite3.Database(dbFile, (err) => {
     }
     log.d("打开数据库成功")
 })
-// function queryQll(sql) {
-//     return new Promise((resolve, __) => {
-//         db.all(sql, (err, rows) => {
-//             if (err) {
-//                 resolve(NewError(err.message)) 
-//                 return 
-//             }
-//             resolve(NewOK(rows)) 
-//         })
-//     })
-// }
 class ToolDbTheory {
     registerOn(ipcMain, mainWin) {
         ipcMain.handle("db-query-prime-byindex",async (event, args) => {
