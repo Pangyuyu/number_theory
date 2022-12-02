@@ -3,6 +3,7 @@
 /nt_client/.yarn/install-state.gz
 /nt_client/node_modules/
 /nt_client/node_modules/
+/datasource/
 
 /nt_server/logs/
 .vscode/*

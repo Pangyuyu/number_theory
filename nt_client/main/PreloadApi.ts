@@ -123,4 +123,9 @@ export default interface PreLoadApi {
      * 质数间隔统计
      */
     dbQueryPrimeSpacingStat(start:number,end:number):Promise<any>,
+    /**
+     * 获取某数的考拉茨序列
+     * @param a 正整数
+     */
+    collatzGetSequence(value:number):Promise<any>,
 }

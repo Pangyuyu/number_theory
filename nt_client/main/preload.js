@@ -48,4 +48,5 @@ contextBridge.exposeInMainWorld('EPre', {
     dbQueryPrimeInterval: (start, end) => ipcRenderer.invoke("db-query-prime-interval", { start: start, end: end }),
     dbQueryPrimeFirstSpacing:(start, end)=>ipcRenderer.invoke("db-query-prime-first-spacing", { start: start, end: end }),
     dbQueryPrimeSpacingStat:(start, end)=>ipcRenderer.invoke("db-query-prime-spacing-stat", { start: start, end: end }),
+    collatzGetSequence:(value)=>ipcRenderer.invoke("collatz-getSequence",{value:value})
 })

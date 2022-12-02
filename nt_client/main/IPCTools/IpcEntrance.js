@@ -4,7 +4,8 @@ const toolFireware = require("./tool-firmware")
 const toolApp = require("./tool-app")
 const toolFileDown = require("./tool-file-down")
 const toolSafe = require("./tool-safe")
-const toolDbSqlite =require("./tool-sqlite")
+const toolPrime = require("./tool-Prime")
+const toolCollatz = require("./tool-collatz")
 class IpcEntrance {
     removeAll() {
         //清理可能存在的事件，因为托盘可能会二次打开窗体
@@ -14,7 +15,9 @@ class IpcEntrance {
         toolApp.unRegister(ipcMain)
         toolFileDown.unRegister(ipcMain)
         toolSafe.unRegister(ipcMain)
-        toolDbSqlite.unRegister(ipcMain)
+        toolPrime.unRegister(ipcMain)
+        toolCollatz.unRegister(ipcMain)
+        
     }
     register(mainWin) {
         this.removeAll()
@@ -23,7 +26,8 @@ class IpcEntrance {
         toolApp.registerOn(ipcMain, mainWin)
         toolFileDown.registerOn(ipcMain, mainWin)
         toolSafe.registerOn(ipcMain, mainWin)
-        toolDbSqlite.registerOn(ipcMain,mainWin)
+        toolPrime.registerOn(ipcMain, mainWin)
+        toolCollatz.registerOn(ipcMain, mainWin)
     }
 }
 module.exports = new IpcEntrance()
