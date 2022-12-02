@@ -138,7 +138,7 @@ async function onClickStartCalcAuto() {
     for (let i = startIndex.value; i <= endIndex.value; i++) {
         await RunCalcCollazSeq(i)
         curCalc.value=i
-        await RunSleep(2)
+        await RunSleep(0.5)
         if(!calcRunning){
             break
         }

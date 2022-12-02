@@ -154,7 +154,7 @@ async function onClickStartLoading() {
                 break
             }
             const queryRes = await queryFunc(i, i + groupCount.value)
-            console.log("查询结果", queryRes)
+            // console.log("查询结果", queryRes)
             if (queryRes.isFail) {
                 console.error("查询失败", queryRes)
                 break;
