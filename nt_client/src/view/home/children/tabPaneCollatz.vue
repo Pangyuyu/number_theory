@@ -119,8 +119,10 @@ function initEcharts() {
             realtime: true,
             type: 'slider', // 有type这个属性，滚动条在最下面，也可以不行，写y：36，这表示距离顶端36px，一般就是在图上面。
             height: 20, // 表示滚动条的高度，也就是粗细
-            start: 0, // 表示默认展示20%～80%这一段。
-            end: 50
+            // start: 0, // 表示默认展示20%～80%这一段。
+            // end: 50
+            startValue: 0,//数据窗口范围的起始数值(绝对数值)。如果设置了dataZoom-inside.start 则startValue失效。
+            endValue: 100,
         }
     });
 }
