@@ -9,10 +9,12 @@
             <div class="title">起始位置:</div>
             <el-input-number v-model="startIndex" :min="5" :max="50847534" :disabled="loading" />
             <div class="title">结束位置:</div>
-            <el-input-number v-model="endIndex" :min="1" :max="50847534" :disabled="loading" />
-            <el-button type="primary" style="margin-left:10px" @Click="onClickStartCalcAuto()"
+            <el-input-number v-model="endIndex" :min="5" :max="50847534" :disabled="loading" />
+            <el-button type="primary" style="margin-left:10px" size="small" @Click="onClickStartCalcAuto()"
                 :loading="loading">开始计算</el-button>
-                <el-button type="danger" style="margin-left:10px" @Click="onClickStartCalcAutoStop()">停止计算</el-button>
+                <el-button type="danger" style="margin-left:10px"  size="small" @Click="onClickStartCalcAutoStop()">停止计算</el-button>
+            <div class="line-v"></div>
+            <el-button type="success" size="small" @click="onClickGetMaxNo()">MAX NO</el-button>
         </div>
         <div class="echarts" id="echarts_Collatz"></div>
         <div class="status-bar">
@@ -46,9 +48,16 @@ const options = ref([
         displayMode: 'echart',
         seriestype: 'line',
         hasCycle: true,
+    },
+    {
+        value: 1,
+        label: "冰雹步长",
+        displayMode: 'echart',
+        seriestype: 'line',
+        hasCycle: true,
     }
 ])
-const startIndex = ref(0)
+const startIndex = ref(5)
 const endIndex = ref(100)
 onMounted(() => {
     window.onresize = function () {
@@ -109,6 +118,7 @@ function RunCalcCollazSeq(num: number) {
         xList = []
         yList = []
         const calcRes = await window.EPre.collatzGetSequence(num)
+        await window.EPre.collatzGetSequence(num)
         calcRes.data.forEach(item => {
             xList.push(xList.length + 1)
             yList.push(item)
@@ -138,7 +148,7 @@ async function onClickStartCalcAuto() {
     for (let i = startIndex.value; i <= endIndex.value; i++) {
         await RunCalcCollazSeq(i)
         curCalc.value=i
-        await RunSleep(0.5)
+        await RunSleep(0.2)
         if(!calcRunning){
             break
         }
@@ -148,5 +158,14 @@ async function onClickStartCalcAuto() {
 function onClickStartCalcAutoStop(){
     calcRunning=false
     loading.value = false
+}
+async function onClickGetMaxNo(){
+    const queryRes=await window.EPre.collatzCurCalcMaxNo()
+    console.log("queryRes",queryRes)
+    if(queryRes.isFail){
+        ModalTool.ShowDialogWarn("提醒",queryRes.message)
+        return
+    }
+    ModalTool.ShowDialogSuccess("最大计算数",queryRes.data.maxNo)
 }
 </script>

@@ -11,9 +11,9 @@
             <el-input-number v-model="endIndex" :min="1" :max="50847534" :disabled="loading" />
             <div class="title">分批数量:</div>
             <el-input-number v-model="groupCount" :min="1" :max="10000" :disabled="loading || !hasCycle" />
-            <el-button type="primary" style="margin-left:10px" @Click="onClickStartLoading()" :loading="loading">开始加载
+            <el-button type="primary"  size="small" style="margin-left:10px" @Click="onClickStartLoading()" :loading="loading">开始加载
             </el-button>
-            <el-button type="success" @Click="onClickEndLoading()" :disabled="!loading">停止加载</el-button>
+            <el-button type="success"  size="small" @Click="onClickEndLoading()" :disabled="!loading">停止加载</el-button>
         </div>
         <div class="echarts" id="echarts_prime"></div>
         <div class="status-bar">

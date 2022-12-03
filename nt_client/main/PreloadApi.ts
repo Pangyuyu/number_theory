@@ -128,4 +128,8 @@ export default interface PreLoadApi {
      * @param a 正整数
      */
     collatzGetSequence(value:number):Promise<any>,
+    /**
+     * 当前最大的计算数
+     */
+    collatzCurCalcMaxNo():Promise<any>,
 }

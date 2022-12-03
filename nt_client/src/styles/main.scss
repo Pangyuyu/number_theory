@@ -52,6 +52,8 @@ body {
     height: 80%;
     width: 1px;
     background-color: $lineColor;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .txt-ellipsis {
@@ -72,7 +74,9 @@ body {
     align-items: center;
     color:white;
     padding-right: 20px;
-    width: calc(100vw);
+    width: calc(100vw - 170px);
+    margin-left: 10px;
+    border-radius: 10px;
     .status-item{
         padding-left: 10px;
         padding-right: 10px;

@@ -8,7 +8,7 @@ class ToolCollatz {
             //先从数据库中查询
             const sql = `select no,seqvalue as value from tb_collatz_seq tcs where tcs."no" =${value}`
             const queryRes = await toolSqlite.queryQll(sql)
-            console.log("查询结果", queryRes)
+            // console.log("查询结果", queryRes)
             if (queryRes.data.length > 0) {
                 seqList = queryRes.data.map(it => {
                     return it.value
@@ -35,14 +35,29 @@ class ToolCollatz {
                 }
                 sqlList.push(";")
                 let allSql=sqlList.join(" ")
-                console.log("sql",allSql)
+                // console.log("sql",allSql)
                 await toolSqlite.run(allSql,{})
             }
             return NewOK(seqList)
         })
+        ipcMain.handle("collatz-curcalc-maxno",async(event,args)=>{
+            const sql = `select max(no) as maxNo from tb_collatz_seq tcs`
+            const queryRes = await toolSqlite.queryQll(sql)
+            console.log("queryRes",queryRes)
+            if(queryRes.isFail){
+                return queryRes
+            }
+            if(queryRes.data.length==0){
+                return NewError("数据库中暂无数据")
+            }
+            return NewOK({
+                maxNo:queryRes.data[0].maxNo
+            })
+        })
     }
     unRegister(ipcMain) {
         ipcMain.removeHandler("collatz-getSequence")
+        ipcMain.removeHandler("collatz-curcalc-maxno")
     }
 }
 

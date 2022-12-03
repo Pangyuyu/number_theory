@@ -7,7 +7,7 @@
       <el-tab-pane label="圆周率" name="tabPanePi">
         <tabPanePaiVue />
       </el-tab-pane>
-      <el-tab-pane label="3n+1猜想" name="tabPane3n1">
+      <el-tab-pane label="考拉兹猜想" name="tabPaneCollatz">
         <tabPaneCollatzVue />
       </el-tab-pane>
     </el-tabs>
