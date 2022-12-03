@@ -54,10 +54,18 @@ class ToolCollatz {
                 maxNo:queryRes.data[0].maxNo
             })
         })
+        ipcMain.handle("collatz-steps-stat",async(event,args)=>{
+            let start = args.start
+            let end=args.end
+            const sql = `select tcs.no,count(*) as value from tb_collatz_seq tcs WHERE tcs."no" >=${start} and tcs."no" <=${end}  group by tcs."no" `
+            const queryRes = await toolSqlite.queryQll(sql)
+            return queryRes
+        })
     }
     unRegister(ipcMain) {
         ipcMain.removeHandler("collatz-getSequence")
         ipcMain.removeHandler("collatz-curcalc-maxno")
+        ipcMain.removeHandler("collatz-steps-stat")
     }
 }
 

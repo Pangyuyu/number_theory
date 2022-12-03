@@ -50,4 +50,5 @@ contextBridge.exposeInMainWorld('EPre', {
     dbQueryPrimeSpacingStat:(start, end)=>ipcRenderer.invoke("db-query-prime-spacing-stat", { start: start, end: end }),
     collatzGetSequence:(value)=>ipcRenderer.invoke("collatz-getSequence",{value:value}),
     collatzCurCalcMaxNo:()=>ipcRenderer.invoke("collatz-curcalc-maxno",{}),
+    collatzStepsStat:(start,end)=>ipcRenderer.invoke("collatz-steps-stat",{start: start, end: end}),
 })

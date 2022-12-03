@@ -125,11 +125,17 @@ export default interface PreLoadApi {
     dbQueryPrimeSpacingStat(start:number,end:number):Promise<any>,
     /**
      * 获取某数的考拉茨序列
-     * @param a 正整数
+     * @param value 正整数
      */
     collatzGetSequence(value:number):Promise<any>,
     /**
      * 当前最大的计算数
      */
     collatzCurCalcMaxNo():Promise<any>,
+    /**
+     * 步数统计
+     * @param start 开始 
+     * @param end 结束
+     */
+    collatzStepsStat(start:number,end:number):Promise<any>,
 }

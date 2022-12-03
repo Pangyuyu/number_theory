@@ -103,6 +103,28 @@ function initEcharts() {
         xAxis: {
             data: xList
         },
+        tooltip: {
+            trigger: 'item',                            //触发类型,'item'数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。 'axis'坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用。
+            triggerOn: "mousemove|click",                      //提示框触发的条件,'mousemove'鼠标移动时触发。'click'鼠标点击时触发。'mousemove|click'同时鼠标移动和点击时触发。'none'不在 'mousemove' 或 'click' 时触发
+            showContent: true,                           //是否显示提示框浮层
+            alwaysShowContent: true,                     //是否永远显示提示框内容
+            showDelay: 0,                                  //浮层显示的延迟，单位为 ms
+            hideDelay: 100,                                //浮层隐藏的延迟，单位为 ms
+            enterable: false,                             //鼠标是否可进入提示框浮层中
+            confine: false,                               //是否将 tooltip 框限制在图表的区域内
+            transitionDuration: 0.4,                      //提示框浮层的移动动画过渡时间，单位是 s,设置为 0 的时候会紧跟着鼠标移动
+            backgroundColor: "rgba(50,50,50,0.7)",            //标题背景色
+            borderColor: "#ccc",                        //边框颜色
+            borderWidth: 0,                              //边框线宽
+            padding: 5,
+            textStyle: {
+                color: '#FFF',     // 文字的颜色
+                fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体） 
+                fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+                fontSize: '12',    // 文字字体大小
+                lineHeight: '50',    // 行高 
+            }
+        },
         yAxis: {},
         series: [
             {
@@ -112,7 +134,15 @@ function initEcharts() {
                 data: yList,
                 symbolSize: [2, 2]
             }
-        ]
+        ],
+        dataZoom: {
+            show: true, // 为true 滚动条出现
+            realtime: true,
+            type: 'slider', // 有type这个属性，滚动条在最下面，也可以不行，写y：36，这表示距离顶端36px，一般就是在图上面。
+            height: 20, // 表示滚动条的高度，也就是粗细
+            start: 0, // 表示默认展示0%～50%这一段。
+            end: 50
+        }
     });
 }
 function updateEcharts() {
